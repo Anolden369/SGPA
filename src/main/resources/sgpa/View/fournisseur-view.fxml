@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.FournisseurController" styleClass="page-root">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    
+    <Label text="Gestion des Fournisseurs" styleClass="module-title"/>
+    
+    <TableView fx:id="tvFournisseurs" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+            <TableColumn fx:id="colNom" text="Nom" prefWidth="200"/>
+            <TableColumn fx:id="colContact" text="Contact" prefWidth="150"/>
+            <TableColumn fx:id="colAdresse" text="Adresse" prefWidth="300"/>
+        </columns>
+    </TableView>
+    
+    <GridPane hgap="10" vgap="10">
+        <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNom" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="250"/>
+        
+        <Label text="Contact:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtContact" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="250"/>
+        
+        <Label text="Adresse:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextArea fx:id="txtAdresse" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="250" prefHeight="80"/>
+    </GridPane>
+    
+    <HBox spacing="10">
+        <Button fx:id="btnAdd" text="Ajouter" onAction="#handleAdd" styleClass="btn-success"/>
+        <Button fx:id="btnUpdate" text="Modifier" onAction="#handleUpdate" styleClass="btn-primary"/>
+        <Button fx:id="btnDelete" text="Supprimer" onAction="#handleDelete" styleClass="btn-danger"/>
+        <Button text="Vider les champs" onAction="#handleClear"/>
+    </HBox>
+</VBox>

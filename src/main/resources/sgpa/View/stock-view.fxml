@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.StockController" styleClass="page-root">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    
+    <Label text="Gestion des Stocks et Alertes" styleClass="module-title"/>
+    
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="Alertes Stock Bas">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <Label text="Médicaments dont le stock est inférieur ou égal au seuil minimum" textFill="#e67e22"/>
+                <TreeTableView fx:id="tvAlertesStock" VBox.vgrow="ALWAYS" showRoot="false" editable="true">
+                    <columns>
+                        <TreeTableColumn fx:id="colStockNom" text="Nom Commercial" prefWidth="220"/>
+                        <TreeTableColumn fx:id="colStockPeremption" text="Péremption lot" prefWidth="130"/>
+                        <TreeTableColumn fx:id="colStockActuel" text="Stock Actuel" prefWidth="110"/>
+                        <TreeTableColumn fx:id="colStockMin" text="Stock Min" prefWidth="100"/>
+                        <TreeTableColumn fx:id="colStockQteCmd" text="Qté à commander" prefWidth="140"/>
+                    </columns>
+                </TreeTableView>
+                <Button fx:id="btnLancerCommande" text="Lancer une commande" onAction="#handleNewCommandeFromStock" styleClass="btn-primary"/>
+            </VBox>
+        </Tab>
+        <Tab text="Alertes Péremption">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <Label text="Médicaments périmant dans les 3 prochains mois" textFill="#c0392b"/>
+                <TreeTableView fx:id="tvAlertesPeremption" VBox.vgrow="ALWAYS" showRoot="false">
+                    <columns>
+                        <TreeTableColumn fx:id="colPerNom" text="Nom Commercial" prefWidth="220"/>
+                        <TreeTableColumn fx:id="colPerDate" text="Date Péremption" prefWidth="150"/>
+                        <TreeTableColumn fx:id="colPerStock" text="Stock lot" prefWidth="100"/>
+                    </columns>
+                </TreeTableView>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>

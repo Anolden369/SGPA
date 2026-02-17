@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.MainController" prefWidth="1000.0" prefHeight="700.0" styleClass="page-root">
+    <left>
+        <VBox spacing="10" styleClass="side-nav" prefWidth="230.0">
+            <padding>
+                <Insets top="20" right="16" bottom="20" left="16"/>
+            </padding>
+            <VBox alignment="CENTER" spacing="8">
+                <Label text="SGPA" styleClass="side-nav-title"/>
+                <VBox.margin><Insets bottom="14"/></VBox.margin>
+            </VBox>
+            
+            <Button fx:id="btnDashboard" text="Tableau de bord" maxWidth="Infinity" onAction="#handleDashboard"/>
+            <Button fx:id="btnMedicaments" text="Médicaments" maxWidth="Infinity" onAction="#handleMedicaments"/>
+            <Button fx:id="btnVentes" text="Ventes" maxWidth="Infinity" onAction="#handleVentes"/>
+            <Button fx:id="btnStocks" text="Stocks / Alertes" maxWidth="Infinity" onAction="#handleStocks"/>
+            <Button fx:id="btnFournisseurs" text="Fournisseurs" maxWidth="Infinity" onAction="#handleFournisseurs"/>
+            <Button fx:id="btnCommandes" text="Commandes" maxWidth="Infinity" onAction="#handleCommandes"/>
+            <Button fx:id="btnUsers" text="Utilisateurs" maxWidth="Infinity" onAction="#handleUsers"/>
+            <Button fx:id="btnRapports" text="Rapports financiers" maxWidth="Infinity" onAction="#handleRapports"/>
+            <Button fx:id="btnML" text="Prévisions ML" maxWidth="Infinity" onAction="#handleML"/>
+            <Button fx:id="btnSettings" text="Paramètres" maxWidth="Infinity" onAction="#handleSettings"/>
+            
+            <Region VBox.vgrow="ALWAYS" />
+            
+            <Button fx:id="btnLogout" text="Déconnexion" maxWidth="Infinity" onAction="#handleLogout" styleClass="side-nav-logout"/>
+        </VBox>
+    </left>
+    
+    <center>
+        <StackPane fx:id="contentPane">
+            <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+            <VBox fx:id="dashboardPane" alignment="CENTER" spacing="20" visible="false" managed="false">
+                <Label fx:id="lblWelcome" text="Bienvenue" styleClass="module-title"/>
+                <Label text="Système de Gestion Pharmacie Avancé" styleClass="muted-label"/>
+            </VBox>
+        </StackPane>
+    </center>
+    
+    <bottom>
+        <HBox styleClass="status-bar">
+            <padding><Insets top="5" right="10" bottom="5" left="10"/></padding>
+            <Label fx:id="lblStatus" text="Connecté en tant que : " styleClass="status-label"/>
+        </HBox>
+    </bottom>
+</BorderPane>

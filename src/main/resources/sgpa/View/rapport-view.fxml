@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.RapportController" styleClass="page-root">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label text="Rapports Financiers" styleClass="module-title"/>
+    
+    <HBox spacing="10" styleClass="kpi-wrap">
+        <VBox fx:id="cardRapHT" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Chiffre d'affaires HT" styleClass="kpi-label"/>
+            <Label fx:id="lblTotalHT" text="0.00 €" styleClass="kpi-value"/>
+        </VBox>
+        <VBox fx:id="cardRapTVA" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Total TVA" styleClass="kpi-label"/>
+            <Label fx:id="lblTotalTVA" text="0.00 €" styleClass="kpi-value"/>
+        </VBox>
+        <VBox fx:id="cardRapTTC" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Chiffre d'affaires TTC" styleClass="kpi-label"/>
+            <Label fx:id="lblTotalTTC" text="0.00 €" styleClass="kpi-value"/>
+        </VBox>
+        <VBox fx:id="cardRapNb" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Nombre de ventes" styleClass="kpi-label"/>
+            <Label fx:id="lblNbVentesMois" text="0" styleClass="kpi-value"/>
+        </VBox>
+        <VBox fx:id="cardRapCout" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Coût d'achat HT" styleClass="kpi-label"/>
+            <Label fx:id="lblCoutAchatHT" text="0.00 €" styleClass="kpi-value"/>
+        </VBox>
+        <VBox fx:id="cardRapMarge" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label text="Marge HT réalisée" styleClass="kpi-label"/>
+            <Label fx:id="lblMargeHT" text="0.00 €" styleClass="kpi-value"/>
+        </VBox>
+    </HBox>
+    
+    <HBox spacing="10" alignment="CENTER_LEFT" styleClass="sales-action-bar">
+        <Button text="Exporter en PDF" onAction="#handleExportPDF" styleClass="btn-export-pdf"/>
+        <Button text="Exporter en Excel" onAction="#handleExportExcel" styleClass="btn-download-alt"/>
+    </HBox>
+    
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="CA mensuel">
+            <BarChart fx:id="chartVentes" title="Évolution du Chiffre d'Affaires TTC (12 derniers mois)" categoryGap="14.0">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT" />
+                </yAxis>
+            </BarChart>
+        </Tab>
+        <Tab text="Ordonnance">
+            <PieChart fx:id="chartOrdonnance" title="Répartition des ventes du mois (Ordonnance / Sans ordonnance)" />
+        </Tab>
+        <Tab text="Top médicaments">
+            <LineChart fx:id="chartTopMedicaments" title="Top 8 médicaments par CA TTC (année en cours)" createSymbols="true" animated="false">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT" />
+                </yAxis>
+            </LineChart>
+        </Tab>
+    </TabPane>
+</VBox>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.CommandeController" styleClass="page-root">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    
+    <Label text="Gestion des Commandes Fournisseurs" styleClass="module-title"/>
+    
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="Nouvelle Commande">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Fournisseur:"/>
+                    <ComboBox fx:id="cbFournisseurs" prefWidth="200"/>
+                </HBox>
+                
+                <Separator/>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Médicament:"/>
+                    <ComboBox fx:id="cbMedicaments" prefWidth="200"/>
+                    <Label text="Quantité:"/>
+                    <TextField fx:id="txtQuantite" prefWidth="80"/>
+                    <Button text="Ajouter au bon" onAction="#handleAddLigne" styleClass="btn-primary"/>
+                </HBox>
+                
+                <TreeTableView fx:id="tvPanier" prefHeight="220" showRoot="false">
+                    <columns>
+                        <TreeTableColumn fx:id="colPanierNom" text="Médicament / Groupe" prefWidth="260"/>
+                        <TreeTableColumn fx:id="colPanierPeremption" text="Péremption lot" prefWidth="140"/>
+                        <TreeTableColumn fx:id="colPanierQte" text="Quantité" prefWidth="100"/>
+                    </columns>
+                </TreeTableView>
+                
+                <HBox spacing="10">
+                    <Button fx:id="btnValiderCommande" text="Valider la commande" onAction="#handleValiderCommande" styleClass="btn-success"/>
+                    <Button text="Vider le bon" onAction="#handleViderPanier"/>
+                </HBox>
+            </VBox>
+        </Tab>
+        
+        <Tab text="Suivi et Reception">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <TableView fx:id="tvCommandes" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colCmdId" text="Référence" prefWidth="110"/>
+                        <TableColumn fx:id="colCmdFournisseur" text="Fournisseur" prefWidth="200"/>
+                        <TableColumn fx:id="colCmdDate" text="Date" prefWidth="150"/>
+                        <TableColumn fx:id="colCmdStatut" text="Statut" prefWidth="100"/>
+                    </columns>
+                </TableView>
+                <Label text="Détails de la commande sélectionnée" styleClass="module-title"/>
+                <TableView fx:id="tvLignesCommande" prefHeight="170">
+                    <columns>
+                        <TableColumn fx:id="colDetNom" text="Médicament" prefWidth="240"/>
+                        <TableColumn fx:id="colDetPeremption" text="Péremption lot" prefWidth="150"/>
+                        <TableColumn fx:id="colDetQte" text="Quantité" prefWidth="120"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10">
+                    <Button fx:id="btnReceptionner" text="Enregistrer la réception" onAction="#handleReception" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>

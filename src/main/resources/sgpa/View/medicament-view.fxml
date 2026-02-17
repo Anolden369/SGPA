@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.MedicamentController" styleClass="page-root">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    
+    <Label text="Gestion des Médicaments" styleClass="module-title"/>
+    
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <TextField fx:id="txtRecherche" promptText="Rechercher un médicament..." prefWidth="300"/>
+        <Button text="Rechercher" onAction="#handleRecherche" styleClass="btn-primary"/>
+    </HBox>
+    
+    <TreeTableView fx:id="tvMedicaments" VBox.vgrow="ALWAYS" showRoot="false">
+        <columns>
+            <TreeTableColumn fx:id="colNom" text="Nom Commercial" prefWidth="200"/>
+            <TreeTableColumn fx:id="colPrincipe" text="Principe Actif" prefWidth="170"/>
+            <TreeTableColumn fx:id="colForme" text="Forme" prefWidth="110"/>
+            <TreeTableColumn fx:id="colDosage" text="Dosage" prefWidth="90"/>
+            <TreeTableColumn fx:id="colPrix" text="Prix Public HT" prefWidth="110"/>
+            <TreeTableColumn fx:id="colPrixAchat" text="Prix Achat HT" prefWidth="110"/>
+            <TreeTableColumn fx:id="colPrixTTC" text="Prix Public TTC" prefWidth="110"/>
+            <TreeTableColumn fx:id="colTva" text="TVA (%)" prefWidth="70"/>
+            <TreeTableColumn fx:id="colOrdonnance" text="Ordonnance" prefWidth="100"/>
+            <TreeTableColumn fx:id="colPeremption" text="Péremption" prefWidth="120"/>
+            <TreeTableColumn fx:id="colStock" text="Stock" prefWidth="80"/>
+            <TreeTableColumn fx:id="colStockMin" text="Stock Min" prefWidth="90"/>
+        </columns>
+    </TreeTableView>
+    
+    <GridPane hgap="10" vgap="10">
+        <Label text="Nom:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtNom" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        
+        <Label text="Principe:" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtPrincipe" GridPane.rowIndex="0" GridPane.columnIndex="3"/>
+        
+        <Label text="Forme:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ComboBox fx:id="cbForme" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="150"/>
+        
+        <Label text="Dosage:" GridPane.rowIndex="1" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtDosage" GridPane.rowIndex="1" GridPane.columnIndex="3"/>
+        
+        <Label text="Prix de vente HT:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtPrix" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Prix Achat HT:" GridPane.rowIndex="2" GridPane.columnIndex="2"/>
+        <TextField fx:id="txtPrixAchat" GridPane.rowIndex="2" GridPane.columnIndex="3"/>
+
+        <Label text="Taux TVA (%):" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtTva" GridPane.rowIndex="3" GridPane.columnIndex="1" text="20.00"/>
+
+        <Label text="Péremption:" GridPane.rowIndex="3" GridPane.columnIndex="2"/>
+        <DatePicker fx:id="dpPeremption" GridPane.rowIndex="3" GridPane.columnIndex="3"/>
+
+        <Label text="Stock Min:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="txtStockMin" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <CheckBox fx:id="chkOrdonnance" text="Nécessite Ordonnance" GridPane.rowIndex="4" GridPane.columnIndex="2"/>
+    </GridPane>
+    
+    <HBox spacing="10">
+        <Button fx:id="btnAdd" text="Ajouter" onAction="#handleAdd" styleClass="btn-success"/>
+        <Button fx:id="btnUpdate" text="Modifier" onAction="#handleUpdate" styleClass="btn-primary"/>
+        <Button fx:id="btnDelete" text="Supprimer" onAction="#handleDelete" styleClass="btn-danger"/>
+        <Button text="Vider les champs" onAction="#handleClear"/>
+    </HBox>
+</VBox>

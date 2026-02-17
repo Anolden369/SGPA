@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="16" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.SettingsController" styleClass="page-root">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <Label text="Paramètres" styleClass="module-title"/>
+    <Label fx:id="lblUserInfo" styleClass="muted-label"/>
+
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="Compte">
+            <VBox spacing="12">
+                <padding><Insets top="14" right="14" bottom="14" left="14"/></padding>
+                <Label text="Modification du mot de passe" styleClass="module-title"/>
+                <GridPane hgap="10" vgap="10">
+                    <Label text="Mot de passe actuel" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                    <PasswordField fx:id="txtCurrentPassword" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                    <Label text="Nouveau mot de passe" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                    <PasswordField fx:id="txtNewPassword" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    <Label text="Confirmation" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                    <PasswordField fx:id="txtConfirmPassword" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                </GridPane>
+                <HBox spacing="8">
+                    <Button text="Mettre à jour" onAction="#handleChangePassword" styleClass="btn-primary"/>
+                </HBox>
+            </VBox>
+        </Tab>
+
+        <Tab text="Notifications">
+            <VBox spacing="12">
+                <padding><Insets top="14" right="14" bottom="14" left="14"/></padding>
+
+                <Label fx:id="lblMailInfo" text="Seul l'administrateur peut modifier les paramètres SMTP." styleClass="muted-label"/>
+
+                <VBox fx:id="adminMailPane" spacing="10" styleClass="card">
+                    <Label text="Alertes stock bas par email" styleClass="module-title"/>
+                    <CheckBox fx:id="chkMailEnabled" text="Activer les notifications automatiques"/>
+
+                    <GridPane hgap="10" vgap="10">
+                        <Label text="SMTP Host" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <TextField fx:id="txtSmtpHost" promptText="smtp.exemple.com" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+                        <Label text="Port" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtSmtpPort" promptText="587" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label text="Utilisateur SMTP" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        <TextField fx:id="txtSmtpUser" promptText="user@domaine.com" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label text="Mot de passe SMTP" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        <PasswordField fx:id="txtSmtpPassword" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <Label text="Adresse expéditeur" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+                        <TextField fx:id="txtSmtpFrom" promptText="sgpa@pharmacie.fr" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        <Label text="Destinataires (virgule)" GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+                        <TextField fx:id="txtSmtpRecipients" promptText="admin@pharmacie.fr, achat@pharmacie.fr" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                    </GridPane>
+
+                    <Separator/>
+                    <HBox spacing="8">
+                        <Button text="Enregistrer" onAction="#handleSaveMailSettings" styleClass="btn-primary"/>
+                        <Button text="Envoyer un test" onAction="#handleTestMail" styleClass="btn-success"/>
+                    </HBox>
+                </VBox>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>

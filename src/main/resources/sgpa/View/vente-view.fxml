@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.VenteController" styleClass="page-root">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+    
+    <Label text="Gestion des Ventes" styleClass="module-title"/>
+    
+    <TabPane tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <Tab text="Nouvelle Vente">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Label text="Médicament:"/>
+                    <ComboBox fx:id="cbMedicaments" prefWidth="250"/>
+                    <Label text="Lot / Péremption:"/>
+                    <ComboBox fx:id="cbLotsPeremption" prefWidth="240"/>
+                    <Label text="Quantité:"/>
+                    <TextField fx:id="txtQuantite" prefWidth="80"/>
+                    <Button text="Ajouter au panier" onAction="#handleAddToPanier" styleClass="btn-primary"/>
+                </HBox>
+                
+                <TableView fx:id="tvPanier" prefHeight="250">
+                    <columns>
+                        <TableColumn fx:id="colPanierNom" text="Médicament" prefWidth="200"/>
+                        <TableColumn fx:id="colPanierPrixHT" text="Prix HT" prefWidth="80"/>
+                        <TableColumn fx:id="colPanierTVA" text="TVA (%)" prefWidth="80"/>
+                        <TableColumn fx:id="colPanierPrixTTC" text="Prix TTC" prefWidth="80"/>
+                        <TableColumn fx:id="colPanierQte" text="Quantité" prefWidth="80"/>
+                        <TableColumn fx:id="colPanierTotalHT" text="Sous-total HT" prefWidth="100"/>
+                        <TableColumn fx:id="colPanierTotalTTC" text="Sous-total TTC" prefWidth="100"/>
+                    </columns>
+                </TableView>
+                
+                <HBox spacing="20" alignment="CENTER_RIGHT">
+                    <CheckBox fx:id="chkOrdonnance" text="Vente sur Ordonnance"/>
+                    <VBox alignment="CENTER_RIGHT" styleClass="card">
+                        <HBox spacing="10">
+                            <Label text="Total HT: "/><Label fx:id="lblTotalHT" text="0.00 €"/>
+                        </HBox>
+                        <HBox spacing="10">
+                            <Label text="Total TVA: "/><Label fx:id="lblTotalTVA" text="0.00 €"/>
+                        </HBox>
+                        <HBox spacing="10">
+                            <Label text="Total TTC: " style="-fx-font-weight: bold; -fx-font-size: 16px;"/><Label fx:id="lblTotalTTC" text="0.00 €" style="-fx-font-weight: bold; -fx-font-size: 16px;"/>
+                        </HBox>
+                    </VBox>
+                </HBox>
+                
+                <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="sales-action-bar">
+                    <Button text="Générer devis PDF" onAction="#handleGenerateDevisPdf" styleClass="btn-download"/>
+                    <Button text="Générer facture PDF" onAction="#handleGenerateFacturePdf" styleClass="btn-download"/>
+                    <Button text="Vider le panier" onAction="#handleClearPanier" styleClass="btn-ghost-soft"/>
+                    <Button text="Valider la vente" onAction="#handleValiderVente" styleClass="btn-sale-confirm"/>
+                </HBox>
+            </VBox>
+        </Tab>
+        
+        <Tab text="Historique des Ventes">
+            <VBox spacing="10">
+                <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+                <TableView fx:id="tvHistorique" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colHistId" text="Référence" prefWidth="110"/>
+                        <TableColumn fx:id="colHistDate" text="Date/Heure" prefWidth="150"/>
+                        <TableColumn fx:id="colHistHT" text="Total HT" prefWidth="100"/>
+                        <TableColumn fx:id="colHistTVA" text="Total TVA" prefWidth="100"/>
+                        <TableColumn fx:id="colHistTTC" text="Total TTC" prefWidth="100"/>
+                        <TableColumn fx:id="colHistOrd" text="Ordonnance" prefWidth="100"/>
+                        <TableColumn fx:id="colHistVendeur" text="Vendeur" prefWidth="150"/>
+                    </columns>
+                </TableView>
+                <Label text="Détails de la vente" styleClass="module-title"/>
+                <TableView fx:id="tvDetails" prefHeight="200">
+                    <columns>
+                        <TableColumn fx:id="colDetNom" text="Médicament" prefWidth="200"/>
+                        <TableColumn fx:id="colDetQte" text="Quantité" prefWidth="80"/>
+                        <TableColumn fx:id="colDetPrixHT" text="Prix HT" prefWidth="100"/>
+                        <TableColumn fx:id="colDetTVA" text="TVA (%)" prefWidth="80"/>
+                        <TableColumn fx:id="colDetPrixTTC" text="Prix TTC" prefWidth="100"/>
+                    </columns>
+                </TableView>
+                <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="sales-action-bar">
+                    <Button text="Facture PDF (vente sélectionnée)" onAction="#handleGenerateFactureFromHistory" styleClass="btn-download"/>
+                </HBox>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>

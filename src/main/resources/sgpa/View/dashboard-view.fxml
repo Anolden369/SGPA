@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Priority?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="18" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.DashboardController" styleClass="page-root">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <Label fx:id="lblDashboardTitle" text="Tableau de bord" styleClass="module-title"/>
+
+    <HBox spacing="14">
+        <VBox fx:id="cardKpi1" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblKpi1Title" text="KPI 1" styleClass="kpi-label"/>
+            <Label fx:id="lblKpi1Value" text="0" styleClass="kpi-value"/>
+        </VBox>
+        <VBox fx:id="cardKpi2" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblKpi2Title" text="KPI 2" styleClass="kpi-label"/>
+            <Label fx:id="lblKpi2Value" text="0" styleClass="kpi-value"/>
+        </VBox>
+        <VBox fx:id="cardKpi3" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblKpi3Title" text="KPI 3" styleClass="kpi-label"/>
+            <Label fx:id="lblKpi3Value" text="0" styleClass="kpi-value"/>
+        </VBox>
+        <VBox fx:id="cardKpi4" alignment="CENTER" styleClass="info-card metric-card" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblKpi4Title" text="KPI 4" styleClass="kpi-label"/>
+            <Label fx:id="lblKpi4Value" text="0" styleClass="kpi-value"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="16" VBox.vgrow="ALWAYS">
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS">
+            <Label fx:id="lblWeekChartTitle" text="Ventes semaine" styleClass="module-title"/>
+            <BarChart fx:id="chartWeekly" categoryGap="14.0" styleClass="chart-flat" VBox.vgrow="ALWAYS">
+                <xAxis>
+                    <CategoryAxis side="BOTTOM" />
+                </xAxis>
+                <yAxis>
+                    <NumberAxis side="LEFT" />
+                </yAxis>
+            </BarChart>
+        </VBox>
+
+        <VBox spacing="8" styleClass="card" HBox.hgrow="ALWAYS" prefWidth="380">
+            <Label fx:id="lblSecondaryChartTitle" text="Répartition" styleClass="module-title"/>
+            <PieChart fx:id="chartSecondary" styleClass="chart-flat" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </HBox>
+</VBox>

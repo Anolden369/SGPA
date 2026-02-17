@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="16" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.MLController" styleClass="page-root">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <Label text="Prévisions de Commande (Machine Learning)" styleClass="module-title"/>
+    <Label text="Ce module admin prédit la demande mensuelle de chaque médicament à partir des 6 derniers mois et suggère une quantité de commande." styleClass="muted-label" wrapText="true"/>
+
+    <TableView fx:id="tvPredictions" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colPredId" text="ID" prefWidth="60"/>
+            <TableColumn fx:id="colPredNom" text="Médicament" prefWidth="240"/>
+            <TableColumn fx:id="colPredStockActuel" text="Stock actuel" prefWidth="110"/>
+            <TableColumn fx:id="colPredStockMin" text="Stock min" prefWidth="100"/>
+            <TableColumn fx:id="colPredDemande" text="Demande prédite/mois" prefWidth="170"/>
+            <TableColumn fx:id="colPredQte" text="Qté suggérée" prefWidth="120"/>
+            <TableColumn fx:id="colPredRisque" text="Risque" prefWidth="120"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="10">
+        <Button text="Rafraîchir prédictions" onAction="#handleRefreshPredictions" styleClass="btn-primary"/>
+        <Button text="Créer commande depuis ML" onAction="#handleNewCommandeFromML" styleClass="btn-success"/>
+    </HBox>
+</VBox>

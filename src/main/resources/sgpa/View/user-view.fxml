@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.UserController" styleClass="page-root">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
+    <Label text="Gestion des Utilisateurs" styleClass="module-title"/>
+    
+    <HBox spacing="10" VBox.vgrow="ALWAYS">
+        <TableView fx:id="tvUsers" HBox.hgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                <TableColumn fx:id="colNom" text="Nom" prefWidth="100"/>
+                <TableColumn fx:id="colPrenom" text="Prénom" prefWidth="100"/>
+                <TableColumn fx:id="colEmail" text="Email" prefWidth="150"/>
+                <TableColumn fx:id="colRole" text="Rôle" prefWidth="100"/>
+            </columns>
+        </TableView>
+        
+        <VBox spacing="10" prefWidth="250" styleClass="card">
+            <Label text="Détails Utilisateur"/>
+            <TextField fx:id="txtNom" promptText="Nom"/>
+            <TextField fx:id="txtPrenom" promptText="Prénom"/>
+            <TextField fx:id="txtEmail" promptText="Email"/>
+            <PasswordField fx:id="txtPassword" promptText="Mot de passe"/>
+            <ComboBox fx:id="cbRole" promptText="Choisir un rôle" maxWidth="Infinity"/>
+            
+            <HBox spacing="5">
+                <Button text="Ajouter" onAction="#handleAdd" maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="btn-success"/>
+                <Button text="Modifier" onAction="#handleUpdate" maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="btn-primary"/>
+            </HBox>
+            <HBox spacing="5">
+                <Button text="Supprimer" onAction="#handleDelete" maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="btn-danger"/>
+                <Button text="Vider" onAction="#handleClear" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            </HBox>
+        </VBox>
+    </HBox>
+</VBox>
