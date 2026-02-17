@@ -201,7 +201,7 @@ Vérifier:
 
 ## 10.3. Ressource image non trouvée
 
-Vérifier la présence des images sous:
+Vérifier la présence des images sous
 
 - `src/main/resources/Images`
 
@@ -222,11 +222,12 @@ Vérifier la présence des images sous:
   - `docs/diagrams/diagramme-classe-sgpa-v3.puml`
   - `docs/diagrams/diagramme-cas-utilisation-sgpa-v3.puml`
 
-## 12. Rendu des diagrammes (optionnel)
+## 11. Comptes de test par défaut :
 
-Si PlantUML est installé, vous pouvez générer les exports:
+- Pharmacien (Administrateur)
+  - email : admin@pharmacie.fr
+  - mdp : admin123
 
-```bash
-plantuml docs/diagrams/diagramme-classe-sgpa-v3.puml
-plantuml docs/diagrams/diagramme-cas-utilisation-sgpa-v3.puml
-```
+- Préparateur/Vendeur (Utilisateur)
+  - email : jean@pharmacie.fr
+  - mdp : vendeur123

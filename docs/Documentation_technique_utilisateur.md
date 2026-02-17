@@ -140,10 +140,15 @@ Comptes typiques présents dans le dump:
 - Vendeur: `jean@pharmacie.fr`
 - Vendeuse: `clara@pharmacie.fr`
 
-Si besoin, test rapide avec l'admin (selon le seed utilisé):
+## 7.1 Comptes de test par défaut :
 
-- mot de passe souvent utilisé: `admin123`
+- Pharmacien (Administrateur)
+    - email : admin@pharmacie.fr
+    - mdp : admin123
 
+- Préparateur/Vendeur (Utilisateur)
+    - email : jean@pharmacie.fr
+    - mdp : vendeur123
 
 ## 8. Vérification fonctionnelle rapide (checklist)
 
@@ -221,12 +226,3 @@ Vérifier la présence des images sous:
 - Diagrammes UML (codes à jour):
   - `docs/diagrams/diagramme-classe-sgpa-v3.puml`
   - `docs/diagrams/diagramme-cas-utilisation-sgpa-v3.puml`
-
-## 12. Rendu des diagrammes (optionnel)
-
-Si PlantUML est installé, vous pouvez générer les exports:
-
-```bash
-plantuml docs/diagrams/diagramme-classe-sgpa-v3.puml
-plantuml docs/diagrams/diagramme-cas-utilisation-sgpa-v3.puml
-```
