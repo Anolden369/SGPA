@@ -13,7 +13,12 @@ import java.sql.SQLException;
 
 public class SGPApplication extends Application {
     private static Stage mainStage;
-    private static final String MAIN_STYLESHEET = SGPApplication.class.getResource("/CSS/MesStyles.css").toExternalForm();
+    private static final String MAIN_STYLESHEET = resolveStylesheet();
+
+    private static String resolveStylesheet() {
+        var css = SGPApplication.class.getResource("/CSS/MesStyles.css");
+        return css == null ? null : css.toExternalForm();
+    }
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -36,8 +41,15 @@ public class SGPApplication extends Application {
         Parent root = loader.load();
         mainStage.setTitle("SGPA - Connexion");
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(MAIN_STYLESHEET);
+        if (MAIN_STYLESHEET != null) {
+            scene.getStylesheets().add(MAIN_STYLESHEET);
+        }
+        mainStage.setFullScreen(false);
+        mainStage.setMaximized(false);
         mainStage.setScene(scene);
+        mainStage.setWidth(1180);
+        mainStage.setHeight(760);
+        mainStage.centerOnScreen();
         mainStage.show();
     }
 
@@ -46,12 +58,17 @@ public class SGPApplication extends Application {
         Parent root = loader.load();
         mainStage.setTitle("SGPA - Système de Gestion Pharmacie Avancé");
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(MAIN_STYLESHEET);
+        if (MAIN_STYLESHEET != null) {
+            scene.getStylesheets().add(MAIN_STYLESHEET);
+        }
         mainStage.setScene(scene);
-        mainStage.centerOnScreen();
+        mainStage.setFullScreenExitHint("");
+        mainStage.setFullScreen(true);
+        mainStage.show();
     }
 
+    @SuppressWarnings("unused")
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

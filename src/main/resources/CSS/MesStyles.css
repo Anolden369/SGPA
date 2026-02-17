@@ -1,3 +1,4 @@
+/*noinspection CssUnknownProperty,CssInvalidFunction,CssInvalidPseudoSelector,CssUnresolvedCustomProperty*/
 .root {
     -color-bg: #eef6f1;
     -color-surface: #ffffff;
@@ -259,6 +260,36 @@
 
 .doc-form-grid .text-field {
     -fx-pref-height: 38;
+}
+
+.history-search-bar {
+    -fx-padding: 12;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+    -fx-background-color: linear-gradient(to right, #f7fcf9, #edf7f2);
+    -fx-border-color: #d2e5da;
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+    -fx-background-radius: 14;
+}
+
+.history-search-bar .label {
+    -fx-font-weight: 600;
+    -fx-text-fill: #2a4b3f;
+}
+
+.history-search-bar .text-field,
+.history-search-bar .date-picker,
+.history-search-bar .combo-box {
+    -fx-pref-height: 36;
+}
+
+.history-search-bar .date-picker {
+    -fx-background-color: transparent;
+}
+
+.history-search-bar .date-picker > .text-field {
+    -fx-border-width: 1;
 }
 
 .text-field,

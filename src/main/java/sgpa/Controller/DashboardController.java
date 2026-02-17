@@ -83,7 +83,8 @@ public class DashboardController {
 
         lblWeekChartTitle.setText("Ventes de la semaine (Lundi-Samedi)");
         Map<String, Integer> weekly = servicesVente.getVentesSemaineCourante();
-        chartWeekly.getData().setAll(buildWeeklySeries("Ventes", weekly));
+        chartWeekly.getData().clear();
+        chartWeekly.getData().add(buildWeeklySeries("Ventes", weekly));
 
         lblSecondaryChartTitle.setText("Répartition des statuts de commande");
         Map<String, Integer> status = servicesCommande.getRepartitionStatuts();
@@ -114,7 +115,8 @@ public class DashboardController {
 
         lblWeekChartTitle.setText("Mes ventes de la semaine (Lundi-Samedi)");
         Map<String, Integer> weekly = servicesVente.getVentesSemaineCouranteByUser(userId);
-        chartWeekly.getData().setAll(buildWeeklySeries("Mes ventes", weekly));
+        chartWeekly.getData().clear();
+        chartWeekly.getData().add(buildWeeklySeries("Mes ventes", weekly));
 
         lblSecondaryChartTitle.setText("Répartition de l'état du stock");
         Map<String, Integer> stock = servicesMedicament.getRepartitionEtatStock();

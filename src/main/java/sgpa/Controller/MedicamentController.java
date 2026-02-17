@@ -3,15 +3,12 @@ package sgpa.Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import sgpa.Entities.Medicament;
 import sgpa.Services.ServicesMedicament;
-import sgpa.Utils.TableCellUtils;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -47,10 +44,6 @@ public class MedicamentController {
     @FXML private DatePicker dpPeremption;
     @FXML private CheckBox chkOrdonnance;
     @FXML private TextField txtStockMin;
-    @FXML private Button btnAdd;
-    @FXML private Button btnUpdate;
-    @FXML private Button btnDelete;
-
     private ServicesMedicament servicesMedicament;
     private ObservableList<Medicament> allMedicaments;
 
@@ -108,7 +101,7 @@ public class MedicamentController {
             @Override
             protected void updateItem(Boolean item, boolean empty) {
                 super.updateItem(item, empty);
-                boolean isParent = getTreeTableRow() != null && getTreeTableRow().getTreeItem() != null && !getTreeTableRow().getTreeItem().isLeaf();
+                boolean isParent = isParentRow(this);
                 setText(empty || item == null || isParent ? null : (item ? "Oui" : "Non"));
             }
         });
@@ -120,7 +113,7 @@ public class MedicamentController {
             @Override
             protected void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
-                boolean isParent = getTreeTableRow() != null && getTreeTableRow().getTreeItem() != null && !getTreeTableRow().getTreeItem().isLeaf();
+                boolean isParent = isParentRow(this);
                 setText(empty || item == null || isParent ? null : item.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             }
         });
@@ -128,7 +121,7 @@ public class MedicamentController {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
-                boolean isParent = getTreeTableRow() != null && getTreeTableRow().getTreeItem() != null && !getTreeTableRow().getTreeItem().isLeaf();
+                boolean isParent = isParentRow(this);
                 setText(empty || item == null || isParent ? null : String.valueOf(item));
             }
         });
@@ -139,7 +132,7 @@ public class MedicamentController {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
-                boolean isParent = getTreeTableRow() != null && getTreeTableRow().getTreeItem() != null && !getTreeTableRow().getTreeItem().isLeaf();
+                boolean isParent = isParentRow(this);
                 setText(empty || item == null || isParent ? null : String.format("%.2f €", item));
             }
         };
@@ -150,10 +143,16 @@ public class MedicamentController {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
-                boolean isParent = getTreeTableRow() != null && getTreeTableRow().getTreeItem() != null && !getTreeTableRow().getTreeItem().isLeaf();
+                boolean isParent = isParentRow(this);
                 setText(empty || item == null || isParent ? null : String.format("%.2f %%", item));
             }
         };
+    }
+
+    private <T> boolean isParentRow(TreeTableCell<Medicament, T> cell) {
+        TreeTableRow<Medicament> row = cell.getTableRow();
+        TreeItem<Medicament> rowItem = row == null ? null : row.getTreeItem();
+        return rowItem != null && !rowItem.isLeaf();
     }
 
     private void loadMedicaments() {
@@ -179,19 +178,19 @@ public class MedicamentController {
     }
 
     @FXML
-    private void handleAdd(ActionEvent event) {
+    private void handleAdd() {
         try {
             Medicament m = getMedicamentFromFields();
             servicesMedicament.addMedicament(m);
             loadMedicaments();
-            handleClear(null);
+            handleClear();
         } catch (Exception e) {
             showError("Erreur d'ajout", e.getMessage());
         }
     }
 
     @FXML
-    private void handleUpdate(ActionEvent event) {
+    private void handleUpdate() {
         TreeItem<Medicament> selectedItem = tvMedicaments.getSelectionModel().getSelectedItem();
         Medicament selected = selectedItem == null ? null : selectedItem.getValue();
         if (selectedItem != null && !selectedItem.isLeaf()) selected = null;
@@ -207,7 +206,7 @@ public class MedicamentController {
     }
 
     @FXML
-    private void handleDelete(ActionEvent event) {
+    private void handleDelete() {
         TreeItem<Medicament> selectedItem = tvMedicaments.getSelectionModel().getSelectedItem();
         Medicament selected = selectedItem == null ? null : selectedItem.getValue();
         if (selectedItem != null && !selectedItem.isLeaf()) selected = null;
@@ -215,14 +214,14 @@ public class MedicamentController {
         try {
             servicesMedicament.deleteMedicament(selected.getId());
             loadMedicaments();
-            handleClear(null);
+            handleClear();
         } catch (SQLException e) {
             showError("Erreur de suppression", e.getMessage());
         }
     }
 
     @FXML
-    private void handleClear(ActionEvent event) {
+    private void handleClear() {
         txtNom.clear();
         txtPrincipe.clear();
         cbForme.getSelectionModel().clearSelection();
@@ -236,7 +235,7 @@ public class MedicamentController {
     }
 
     @FXML
-    private void handleRecherche(ActionEvent event) {
+    private void handleRecherche() {
         String filter = txtRecherche.getText().toLowerCase();
         if (filter.isEmpty()) {
             rebuildTree(allMedicaments);
@@ -256,10 +255,10 @@ public class MedicamentController {
 
         for (Map.Entry<String, List<Medicament>> entry : grouped.entrySet()) {
             List<Medicament> lots = entry.getValue().stream()
-                    .sorted((a, b) -> a.getDatePeremption().compareTo(b.getDatePeremption()))
+                    .sorted(java.util.Comparator.comparing(Medicament::getDatePeremption))
                     .toList();
             if (lots.size() == 1) {
-                root.getChildren().add(new TreeItem<>(lots.get(0)));
+                root.getChildren().add(new TreeItem<>(lots.getFirst()));
             } else {
                 int totalStock = lots.stream().mapToInt(Medicament::getStockActuel).sum();
                 Medicament parent = new Medicament();

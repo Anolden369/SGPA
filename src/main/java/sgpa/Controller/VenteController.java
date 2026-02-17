@@ -2,7 +2,7 @@ package sgpa.Controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -33,9 +33,12 @@ import sgpa.Utils.TableViewUtils;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 public class VenteController {
@@ -63,6 +66,10 @@ public class VenteController {
     @FXML private TableColumn<Vente, Double> colHistTTC;
     @FXML private TableColumn<Vente, Boolean> colHistOrd;
     @FXML private TableColumn<Vente, String> colHistVendeur;
+    @FXML private TextField txtSearchHistorique;
+    @FXML private DatePicker dpHistFrom;
+    @FXML private DatePicker dpHistTo;
+    @FXML private ComboBox<String> cbHistOrdonnance;
 
     @FXML private TableView<LigneVente> tvDetails;
     @FXML private TableColumn<LigneVente, String> colDetNom;
@@ -78,6 +85,7 @@ public class VenteController {
     private ObservableList<LigneVente> panier;
     private ObservableList<Medicament> medicinesByName;
     private ObservableList<Medicament> allMedicaments;
+    private FilteredList<Vente> filteredHistorique;
     private double montantTotalHT = 0.0;
     private double montantTotalTVA = 0.0;
     private double montantTotalTTC = 0.0;
@@ -137,6 +145,7 @@ public class VenteController {
                 loadDetails(newVal.getId());
             }
         });
+        setupHistoriqueSearch();
 
         loadData();
     }
@@ -145,7 +154,7 @@ public class VenteController {
         try {
             tvDetails.setItems(servicesVente.getLignesVente(idVente));
         } catch (SQLException e) {
-            e.printStackTrace();
+            showError("Erreur", "Impossible de charger le détail de la vente: " + e.getMessage());
         }
     }
 
@@ -175,10 +184,53 @@ public class VenteController {
                 cbMedicaments.getSelectionModel().selectFirst();
                 refreshLotsForSelectedName();
             }
-            tvHistorique.setItems(servicesVente.getHistoriqueVentes());
+            ObservableList<Vente> historiqueData = servicesVente.getHistoriqueVentes();
+            filteredHistorique = new FilteredList<>(historiqueData, vente -> true);
+            tvHistorique.setItems(filteredHistorique);
+            applyHistoriqueFilter();
         } catch (SQLException e) {
-            e.printStackTrace();
+            showError("Erreur", "Impossible de charger les ventes: " + e.getMessage());
         }
+    }
+
+    private void setupHistoriqueSearch() {
+        cbHistOrdonnance.setItems(FXCollections.observableArrayList("Tous", "Oui", "Non"));
+        cbHistOrdonnance.getSelectionModel().selectFirst();
+        txtSearchHistorique.textProperty().addListener((obs, oldVal, newVal) -> applyHistoriqueFilter());
+        dpHistFrom.valueProperty().addListener((obs, oldVal, newVal) -> applyHistoriqueFilter());
+        dpHistTo.valueProperty().addListener((obs, oldVal, newVal) -> applyHistoriqueFilter());
+        cbHistOrdonnance.valueProperty().addListener((obs, oldVal, newVal) -> applyHistoriqueFilter());
+    }
+
+    private void applyHistoriqueFilter() {
+        if (filteredHistorique == null) return;
+
+        String raw = txtSearchHistorique.getText() == null ? "" : txtSearchHistorique.getText().trim();
+        String query = raw.toLowerCase(Locale.ROOT);
+        LocalDate from = dpHistFrom.getValue();
+        LocalDate to = dpHistTo.getValue();
+        String ordFilter = cbHistOrdonnance.getValue() == null ? "Tous" : cbHistOrdonnance.getValue();
+
+        filteredHistorique.setPredicate(vente -> {
+            if (vente == null) return false;
+
+            if (!query.isBlank()) {
+                String ref = vente.getReference() == null ? "" : vente.getReference().toLowerCase(Locale.ROOT);
+                String vendeur = vente.getNomVendeur() == null ? "" : vente.getNomVendeur().toLowerCase(Locale.ROOT);
+                String dateTxt = vente.getDateHeure() == null ? "" : vente.getDateHeure().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")).toLowerCase(Locale.ROOT);
+                if (!ref.contains(query) && !vendeur.contains(query) && !dateTxt.contains(query)) {
+                    return false;
+                }
+            }
+
+            LocalDate venteDate = vente.getDateHeure() == null ? null : vente.getDateHeure().toLocalDate();
+            if (from != null && venteDate != null && venteDate.isBefore(from)) return false;
+            if (to != null && venteDate != null && venteDate.isAfter(to)) return false;
+            if (from != null && to != null && from.isAfter(to)) return false;
+
+            if ("Oui".equals(ordFilter) && !vente.isSurOrdonnance()) return false;
+            return !"Non".equals(ordFilter) || !vente.isSurOrdonnance();
+        });
     }
 
     private void configureRenderers() {
@@ -229,7 +281,7 @@ public class VenteController {
     }
 
     @FXML
-    private void handleAddToPanier(ActionEvent event) {
+    private void handleAddToPanier() {
         Medicament m = cbLotsPeremption.getSelectionModel().getSelectedItem();
         String qteStr = txtQuantite.getText();
 
@@ -302,7 +354,7 @@ public class VenteController {
     }
 
     @FXML
-    private void handleGenerateDevisPdf(ActionEvent event) {
+    private void handleGenerateDevisPdf() {
         if (panier.isEmpty()) {
             showError("Devis", "Le panier est vide.");
             return;
@@ -316,14 +368,14 @@ public class VenteController {
         try {
             servicesDocumentVente.generateDevisPdf(file, clientInfo, FXCollections.observableArrayList(panier));
             String mailStatus = maybeSendDocumentByMail(clientInfo, file, "Devis SGPA", "Veuillez trouver ci-joint votre devis.");
-            showInfo("Succès", "Devis PDF généré.\n" + mailStatus);
+            showInfo("Devis PDF généré.\n" + mailStatus);
         } catch (Exception e) {
             showError("Erreur devis", e.getMessage());
         }
     }
 
     @FXML
-    private void handleGenerateFacturePdf(ActionEvent event) {
+    private void handleGenerateFacturePdf() {
         if (panier.isEmpty()) {
             showError("Facture", "Le panier est vide.");
             return;
@@ -337,14 +389,14 @@ public class VenteController {
         try {
             servicesDocumentVente.generateFacturePdf(file, clientInfo, null, FXCollections.observableArrayList(panier));
             String mailStatus = maybeSendDocumentByMail(clientInfo, file, "Facture SGPA", "Veuillez trouver ci-joint votre facture.");
-            showInfo("Succès", "Facture PDF générée.\n" + mailStatus);
+            showInfo("Facture PDF générée.\n" + mailStatus);
         } catch (Exception e) {
             showError("Erreur facture", e.getMessage());
         }
     }
 
     @FXML
-    private void handleGenerateFactureFromHistory(ActionEvent event) {
+    private void handleGenerateFactureFromHistory() {
         Vente selected = tvHistorique.getSelectionModel().getSelectedItem();
         if (selected == null) {
             showError("Facture", "Sélectionnez une vente dans l'historique.");
@@ -361,7 +413,7 @@ public class VenteController {
             List<LigneVente> lines = servicesVente.getLignesVente(selected.getId());
             servicesDocumentVente.generateFacturePdf(file, clientInfo, selected, lines);
             String mailStatus = maybeSendDocumentByMail(clientInfo, file, "Facture " + selected.getReference(), "Veuillez trouver ci-joint votre facture.");
-            showInfo("Succès", "Facture PDF générée depuis l'historique.\n" + mailStatus);
+            showInfo("Facture PDF générée depuis l'historique.\n" + mailStatus);
         } catch (Exception e) {
             showError("Erreur facture", e.getMessage());
         }
@@ -433,7 +485,10 @@ public class VenteController {
 
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
-        scene.getStylesheets().add(getClass().getResource("/CSS/MesStyles.css").toExternalForm());
+        var css = getClass().getResource("/CSS/MesStyles.css");
+        if (css != null) {
+            scene.getStylesheets().add(css.toExternalForm());
+        }
 
         Stage stage = new Stage(StageStyle.TRANSPARENT);
         stage.setScene(scene);
@@ -515,7 +570,7 @@ public class VenteController {
     }
 
     @FXML
-    private void handleValiderVente(ActionEvent event) {
+    private void handleValiderVente() {
         if (panier.isEmpty()) return;
         try {
             int idUser = LoginController.getCurrentUser().getId();
@@ -523,7 +578,7 @@ public class VenteController {
             panier.clear();
             updateTotal();
             loadData();
-            showInfo("Succès", "Vente enregistrée avec succès.");
+            showInfo("Vente enregistrée avec succès.");
         } catch (SQLException e) {
             showError("Erreur", e.getMessage());
         }
@@ -538,7 +593,7 @@ public class VenteController {
         ObservableList<Medicament> lots = FXCollections.observableArrayList(
                 allMedicaments.stream()
                         .filter(m -> m.getNomCommercial().equalsIgnoreCase(selectedName.getNomCommercial()))
-                        .sorted((a, b) -> a.getDatePeremption().compareTo(b.getDatePeremption()))
+                        .sorted(Comparator.comparing(Medicament::getDatePeremption))
                         .toList()
         );
         cbLotsPeremption.setItems(lots);
@@ -548,14 +603,23 @@ public class VenteController {
     }
 
     @FXML
-    private void handleClearPanier(ActionEvent event) {
+    private void handleClearPanier() {
         panier.clear();
         updateTotal();
     }
 
-    private void showInfo(String title, String content) {
+    @FXML
+    private void handleResetHistoriqueFilters() {
+        txtSearchHistorique.clear();
+        dpHistFrom.setValue(null);
+        dpHistTo.setValue(null);
+        cbHistOrdonnance.getSelectionModel().select("Tous");
+        applyHistoriqueFilter();
+    }
+
+    private void showInfo(String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
+        alert.setTitle("Succès");
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();

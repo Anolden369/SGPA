@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.VenteController" styleClass="page-root">
+<VBox spacing="20" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sgpa.Controller.VenteController" styleClass="page-root" stylesheets="@../../CSS/MesStyles.css">
     <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
     
     <Label text="Gestion des Ventes" styleClass="module-title"/>
@@ -26,10 +26,10 @@
                 <TableView fx:id="tvPanier" prefHeight="250">
                     <columns>
                         <TableColumn fx:id="colPanierNom" text="Médicament" prefWidth="200"/>
-                        <TableColumn fx:id="colPanierPrixHT" text="Prix HT" prefWidth="80"/>
-                        <TableColumn fx:id="colPanierTVA" text="TVA (%)" prefWidth="80"/>
-                        <TableColumn fx:id="colPanierPrixTTC" text="Prix TTC" prefWidth="80"/>
-                        <TableColumn fx:id="colPanierQte" text="Quantité" prefWidth="80"/>
+                        <TableColumn fx:id="colPanierPrixHT" text="Prix HT"/>
+                        <TableColumn fx:id="colPanierTVA" text="TVA (%)"/>
+                        <TableColumn fx:id="colPanierPrixTTC" text="Prix TTC"/>
+                        <TableColumn fx:id="colPanierQte" text="Quantité"/>
                         <TableColumn fx:id="colPanierTotalHT" text="Sous-total HT" prefWidth="100"/>
                         <TableColumn fx:id="colPanierTotalTTC" text="Sous-total TTC" prefWidth="100"/>
                     </columns>
@@ -62,6 +62,19 @@
         <Tab text="Historique des Ventes">
             <VBox spacing="10">
                 <padding><Insets top="10" right="10" bottom="10" left="10"/></padding>
+
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="history-search-bar">
+                    <Label text="Recherche:"/>
+                    <TextField fx:id="txtSearchHistorique" promptText="Référence ou vendeur..." prefWidth="240"/>
+                    <Label text="Du:"/>
+                    <DatePicker fx:id="dpHistFrom" prefWidth="165"/>
+                    <Label text="Au:"/>
+                    <DatePicker fx:id="dpHistTo" prefWidth="165"/>
+                    <Label text="Ordonnance:"/>
+                    <ComboBox fx:id="cbHistOrdonnance" prefWidth="130"/>
+                    <Button text="Réinitialiser" onAction="#handleResetHistoriqueFilters" styleClass="btn-ghost-soft"/>
+                </HBox>
+
                 <TableView fx:id="tvHistorique" VBox.vgrow="ALWAYS">
                     <columns>
                         <TableColumn fx:id="colHistId" text="Référence" prefWidth="110"/>
@@ -77,9 +90,9 @@
                 <TableView fx:id="tvDetails" prefHeight="200">
                     <columns>
                         <TableColumn fx:id="colDetNom" text="Médicament" prefWidth="200"/>
-                        <TableColumn fx:id="colDetQte" text="Quantité" prefWidth="80"/>
+                        <TableColumn fx:id="colDetQte" text="Quantité"/>
                         <TableColumn fx:id="colDetPrixHT" text="Prix HT" prefWidth="100"/>
-                        <TableColumn fx:id="colDetTVA" text="TVA (%)" prefWidth="80"/>
+                        <TableColumn fx:id="colDetTVA" text="TVA (%)"/>
                         <TableColumn fx:id="colDetPrixTTC" text="Prix TTC" prefWidth="100"/>
                     </columns>
                 </TableView>

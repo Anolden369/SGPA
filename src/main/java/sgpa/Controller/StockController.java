@@ -1,15 +1,11 @@
 package sgpa.Controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.Button;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.input.MouseEvent;
@@ -23,8 +19,6 @@ import sgpa.Entities.Medicament;
 import sgpa.Services.ServicesCommande;
 import sgpa.Services.ServicesFournisseur;
 import sgpa.Services.ServicesMedicament;
-import sgpa.Utils.TableCellUtils;
-import sgpa.Utils.TableViewUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -73,7 +67,8 @@ public class StockController {
             @Override
             public void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
-                TreeItem<Medicament> treeItem = getTreeTableRow() == null ? null : getTreeTableRow().getTreeItem();
+                TreeTableRow<Medicament> row = getTableRow();
+                TreeItem<Medicament> treeItem = row == null ? null : row.getTreeItem();
                 if (empty || treeItem == null || !treeItem.isLeaf()) {
                     setText(empty ? null : "");
                     setEditable(false);
@@ -102,8 +97,8 @@ public class StockController {
         tvAlertesStock.setShowRoot(false);
         tvAlertesPeremption.setRoot(new TreeItem<>(new Medicament()));
         tvAlertesPeremption.setShowRoot(false);
-        tvAlertesStock.setRowFactory(tv -> parentAwareRow(tvAlertesStock));
-        tvAlertesPeremption.setRowFactory(tv -> parentAwareRow(tvAlertesPeremption));
+        tvAlertesStock.setRowFactory(tv -> parentAwareRow());
+        tvAlertesPeremption.setRowFactory(tv -> parentAwareRow());
 
         loadAlertes();
         applyRoleRestrictions();
@@ -130,12 +125,12 @@ public class StockController {
             rebuildTree(tvAlertesStock, servicesMedicament.getAlertesStock());
             rebuildTree(tvAlertesPeremption, servicesMedicament.getAlertesPeremption());
         } catch (SQLException e) {
-            e.printStackTrace();
+            showError("Erreur", "Impossible de charger les alertes: " + e.getMessage());
         }
     }
 
     @FXML
-    private void handleNewCommandeFromStock(ActionEvent event) {
+    private void handleNewCommandeFromStock() {
         var user = LoginController.getCurrentUser();
         if (user == null || !"Pharmacien".equals(user.getRole())) {
             showError("Accès refusé", "Seul le Pharmacien peut lancer une commande fournisseur.");
@@ -158,9 +153,9 @@ public class StockController {
             alert.setTitle("Commande Automatique");
             alert.setHeaderText("Générer un bon de commande ?");
             alert.setContentText("Voulez-vous générer une commande pour tous les produits en alerte stock ?\nLe fournisseur par défaut sera : "
-                + fournisseurs.get(0).getNom());
+                + fournisseurs.getFirst().getNom());
 
-            if (alert.showAndWait().get() == ButtonType.OK) {
+            if (alert.showAndWait().filter(ButtonType.OK::equals).isPresent()) {
                 List<LigneCommande> lignes = new ArrayList<>();
                 for (Medicament med : basStocks) {
                     if (med.getQuantiteCommande() > 0) {
@@ -172,7 +167,7 @@ public class StockController {
                     return;
                 }
 
-                servicesCommande.creerCommande(fournisseurs.get(0).getId(), lignes);
+                servicesCommande.creerCommande(fournisseurs.getFirst().getId(), lignes);
                 showInfo("Succès", "Commande générée automatiquement pour " + lignes.size() + " médicament(s).");
                 loadAlertes();
             }
@@ -236,11 +231,11 @@ public class StockController {
 
         for (Map.Entry<String, List<Medicament>> entry : grouped.entrySet()) {
             List<Medicament> lots = entry.getValue().stream()
-                    .sorted((a, b) -> a.getDatePeremption().compareTo(b.getDatePeremption()))
+                    .sorted(java.util.Comparator.comparing(Medicament::getDatePeremption))
                     .toList();
             if (lots.size() == 1) {
-                lots.get(0).setQuantiteCommande(0);
-                root.getChildren().add(new TreeItem<>(lots.get(0)));
+                lots.getFirst().setQuantiteCommande(0);
+                root.getChildren().add(new TreeItem<>(lots.getFirst()));
             } else {
                 Medicament parent = new Medicament();
                 parent.setNomCommercial(entry.getKey());
@@ -260,7 +255,7 @@ public class StockController {
         table.setRoot(root);
     }
 
-    private TreeTableRow<Medicament> parentAwareRow(TreeTableView<Medicament> table) {
+    private TreeTableRow<Medicament> parentAwareRow() {
         TreeTableRow<Medicament> row = new TreeTableRow<>() {
             @Override
             protected void updateItem(Medicament item, boolean empty) {
