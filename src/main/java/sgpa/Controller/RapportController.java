@@ -19,7 +19,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
@@ -41,6 +40,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import sgpa.Entities.Vente;
 import sgpa.SGPApplication;
 import sgpa.Services.ServicesVente;
+import sgpa.Utils.InAppDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -584,18 +584,10 @@ public class RapportController {
     }
 
     private void showInfo(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.success(chartVentes, title, content);
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(chartVentes, title, content);
     }
 }

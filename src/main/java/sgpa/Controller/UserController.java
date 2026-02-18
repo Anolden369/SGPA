@@ -7,6 +7,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import sgpa.Entities.User;
 import sgpa.SGPApplication;
 import sgpa.Services.ServicesUser;
+import sgpa.Utils.InAppDialog;
 import sgpa.Utils.TableCellUtils;
 import sgpa.Utils.TableViewUtils;
 
@@ -114,11 +115,8 @@ public class UserController {
             txtPassword.clear();
 
             if (selfRoleChanged) {
-                Alert info = new Alert(Alert.AlertType.INFORMATION);
-                info.setTitle("Rôle modifié");
-                info.setHeaderText(null);
-                info.setContentText("Votre rôle a été modifié. Vous allez être déconnecté pour recharger vos permissions.");
-                info.showAndWait();
+                InAppDialog.info(tvUsers, "Rôle modifié",
+                        "Votre rôle a été modifié. Vous allez être déconnecté pour recharger vos permissions.");
 
                 LoginController.clearCurrentUser();
                 SGPApplication.showLoginScene();
@@ -153,9 +151,6 @@ public class UserController {
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(tvUsers, title, content);
     }
 }

@@ -9,8 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.collections.ObservableList;
 import javafx.util.converter.IntegerStringConverter;
 import sgpa.Entities.Fournisseur;
@@ -19,6 +17,7 @@ import sgpa.Entities.Medicament;
 import sgpa.Services.ServicesCommande;
 import sgpa.Services.ServicesFournisseur;
 import sgpa.Services.ServicesMedicament;
+import sgpa.Utils.InAppDialog;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -149,13 +148,15 @@ public class StockController {
                 return;
             }
             
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Commande Automatique");
-            alert.setHeaderText("Générer un bon de commande ?");
-            alert.setContentText("Voulez-vous générer une commande pour tous les produits en alerte stock ?\nLe fournisseur par défaut sera : "
-                + fournisseurs.getFirst().getNom());
-
-            if (alert.showAndWait().filter(ButtonType.OK::equals).isPresent()) {
+            boolean confirmed = InAppDialog.confirm(
+                    tvAlertesStock,
+                    "Commande automatique",
+                    "Voulez-vous générer une commande pour tous les produits en alerte stock ?\n"
+                            + "Fournisseur par défaut : " + fournisseurs.getFirst().getNom(),
+                    "Lancer",
+                    "Annuler"
+            );
+            if (confirmed) {
                 List<LigneCommande> lignes = new ArrayList<>();
                 for (Medicament med : basStocks) {
                     if (med.getQuantiteCommande() > 0) {
@@ -199,19 +200,11 @@ public class StockController {
     }
 
     private void showInfo(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.success(tvAlertesStock, title, content);
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(tvAlertesStock, title, content);
     }
 
     private javafx.scene.control.TreeTableCell<Medicament, LocalDate> dateCell() {

@@ -671,3 +671,46 @@
 .login-image {
     -fx-effect: none;
 }
+
+.inapp-overlay {
+    -fx-background-color: rgba(7, 23, 18, 0.28);
+    -fx-padding: 28;
+    -fx-alignment: center;
+}
+
+.inapp-dialog {
+    -fx-background-color: linear-gradient(to bottom, #ffffff, #f3faf6);
+    -fx-border-color: #cfe2d8;
+    -fx-border-width: 1;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, rgba(8, 27, 21, 0.22), 20, 0.2, 0, 5);
+}
+
+.inapp-dialog-title {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: #1d3a31;
+}
+
+.inapp-dialog-message {
+    -fx-font-size: 13px;
+    -fx-text-fill: #2f5145;
+    -fx-line-spacing: 2px;
+}
+
+.inapp-dialog-success {
+    -fx-border-color: #9dd8bf;
+}
+
+.inapp-dialog-info {
+    -fx-border-color: #b9d6cb;
+}
+
+.inapp-dialog-error {
+    -fx-border-color: #e4a9b4;
+}
+
+.inapp-dialog-confirm {
+    -fx-border-color: #c4d9cd;
+}

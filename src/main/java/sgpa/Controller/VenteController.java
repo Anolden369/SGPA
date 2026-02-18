@@ -28,6 +28,7 @@ import sgpa.Services.ServicesDocumentVente;
 import sgpa.Services.ServicesMedicament;
 import sgpa.Services.ServicesNotification;
 import sgpa.Services.ServicesVente;
+import sgpa.Utils.InAppDialog;
 import sgpa.Utils.TableCellUtils;
 import sgpa.Utils.TableViewUtils;
 
@@ -618,18 +619,10 @@ public class VenteController {
     }
 
     private void showInfo(String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Succès");
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.success(tvPanier, "Succès", content);
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(tvPanier, title, content);
     }
 }

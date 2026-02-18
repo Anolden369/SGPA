@@ -2,7 +2,6 @@ package sgpa.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -12,6 +11,7 @@ import sgpa.Entities.User;
 import sgpa.Services.ServicesNotification;
 import sgpa.Services.ServicesSettings;
 import sgpa.Services.ServicesUser;
+import sgpa.Utils.InAppDialog;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -136,18 +136,10 @@ public class SettingsController {
     }
 
     private void showInfo(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.success(lblUserInfo, title, content);
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(lblUserInfo, title, content);
     }
 }

@@ -6,6 +6,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import sgpa.Entities.Fournisseur;
 import sgpa.Services.ServicesFournisseur;
+import sgpa.Utils.InAppDialog;
 import sgpa.Utils.TableCellUtils;
 import sgpa.Utils.TableViewUtils;
 
@@ -116,9 +117,6 @@ public class FournisseurController {
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(tvFournisseurs, title, content);
     }
 }

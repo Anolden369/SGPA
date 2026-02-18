@@ -3,8 +3,6 @@ package sgpa.Controller;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,6 +13,7 @@ import sgpa.Entities.PredictionCommande;
 import sgpa.Services.ServicesCommande;
 import sgpa.Services.ServicesFournisseur;
 import sgpa.Services.ServicesVente;
+import sgpa.Utils.InAppDialog;
 import sgpa.Utils.TableCellUtils;
 import sgpa.Utils.TableViewUtils;
 
@@ -96,14 +95,17 @@ public class MLController {
                 return;
             }
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Commande recommandée (ML)");
-            alert.setHeaderText("Créer une commande basée sur la prédiction ?");
-            alert.setContentText("Le système va proposer " + lignes.size() + " ligne(s) de commande.\n"
-                    + "Fournisseur par défaut: " + fournisseurs.get(0).getNom());
+            boolean confirmed = InAppDialog.confirm(
+                    tvPredictions,
+                    "Commande recommandée (ML)",
+                    "Le système va proposer " + lignes.size() + " ligne(s) de commande.\n"
+                            + "Fournisseur par défaut : " + fournisseurs.getFirst().getNom(),
+                    "Créer",
+                    "Annuler"
+            );
 
-            if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
-                servicesCommande.creerCommande(fournisseurs.get(0).getId(), lignes);
+            if (confirmed) {
+                servicesCommande.creerCommande(fournisseurs.getFirst().getId(), lignes);
                 showInfo("Succès", "Commande ML générée avec succès.");
             }
         } catch (SQLException e) {
@@ -144,18 +146,10 @@ public class MLController {
     }
 
     private void showInfo(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.success(tvPredictions, title, content);
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(tvPredictions, title, content);
     }
 }

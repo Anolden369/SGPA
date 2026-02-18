@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import sgpa.Entities.Medicament;
 import sgpa.Services.ServicesMedicament;
+import sgpa.Utils.InAppDialog;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -340,10 +341,6 @@ public class MedicamentController {
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(tvMedicaments, title, content);
     }
 }

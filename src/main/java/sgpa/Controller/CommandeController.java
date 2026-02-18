@@ -15,6 +15,7 @@ import sgpa.Entities.Medicament;
 import sgpa.Services.ServicesCommande;
 import sgpa.Services.ServicesFournisseur;
 import sgpa.Services.ServicesMedicament;
+import sgpa.Utils.InAppDialog;
 import sgpa.Utils.TableCellUtils;
 import sgpa.Utils.TableViewUtils;
 
@@ -253,19 +254,11 @@ public class CommandeController {
     }
 
     private void showInfo(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.success(tvCommandes, title, content);
     }
 
     private void showError(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+        InAppDialog.error(tvCommandes, title, content);
     }
 
     private void refreshPanierTree() {
