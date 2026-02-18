@@ -4,6 +4,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.util.Duration;
 import sgpa.Entities.User;
 import sgpa.SGPApplication;
 import sgpa.Services.ServicesUser;
+import sgpa.Utils.InAppDialog;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -39,6 +41,7 @@ public class LoginController {
 
     private ServicesUser servicesUser;
     private static User currentUser;
+    private static String startupErrorMessage;
 
     public void initialize() {
         servicesUser = new ServicesUser();
@@ -49,6 +52,13 @@ public class LoginController {
 
         playEntranceAnimations();
         playStartupBounce();
+
+        if (startupErrorMessage != null && !startupErrorMessage.isBlank()) {
+            String message = startupErrorMessage;
+            startupErrorMessage = null;
+            lblError.setText(message);
+            Platform.runLater(() -> InAppDialog.error(cardPane, "Erreur de connexion BDD", message));
+        }
     }
 
     @FXML
@@ -80,6 +90,10 @@ public class LoginController {
 
     public static void clearCurrentUser() {
         currentUser = null;
+    }
+
+    public static void setStartupErrorMessage(String message) {
+        startupErrorMessage = message;
     }
 
     private void playEntranceAnimations() {

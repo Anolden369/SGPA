@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import sgpa.Controller.LoginController;
 import sgpa.Services.ConnexionBDD;
 
 import java.io.IOException;
@@ -26,6 +27,9 @@ public class SGPApplication extends Application {
             ConnexionBDD.connect();
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println("Erreur de connexion à la base de données : " + e.getMessage());
+            LoginController.setStartupErrorMessage(
+                    "Connexion à la base de données impossible au démarrage. Vérifiez MySQL et la configuration."
+            );
         }
 
         mainStage = stage;
